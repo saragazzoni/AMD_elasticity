@@ -81,7 +81,7 @@ inner_loop4 = gmsh.model.geo.addCurveLoop([inner_circle7, inner_circle8])
 radius_inner2 = 0.1
 # Define the points for the additional inner circle
 xpoint = -0.3
-ypoint = 0.25
+ypoint = -0.05
 inner_point4 = gmsh.model.geo.addPoint(xpoint, ypoint, 0, lc)
 inner_point5 = gmsh.model.geo.addPoint(xpoint+radius_inner2, ypoint, 0, lc)
 inner_point6 = gmsh.model.geo.addPoint(xpoint-radius_inner2, ypoint, 0, lc)
@@ -93,19 +93,49 @@ inner_circle10 = gmsh.model.geo.addCircleArc(inner_point6, inner_point4, inner_p
 # Define the loop representing the additional inner circle (hole)
 inner_loop5 = gmsh.model.geo.addCurveLoop([inner_circle9, inner_circle10])
 
+radius_inner = 0.04
+# Define the points for the additional inner circle
+xpoint = 0.3
+ypoint = -0.1
+inner_point4 = gmsh.model.geo.addPoint(xpoint, ypoint, 0, lc)
+inner_point5 = gmsh.model.geo.addPoint(xpoint+radius_inner, ypoint, 0, lc)
+inner_point6 = gmsh.model.geo.addPoint(xpoint-radius_inner, ypoint, 0, lc)
+
+# Add the additional inner circle geometry (hole)
+inner_circle11 = gmsh.model.geo.addCircleArc(inner_point5, inner_point4, inner_point6)
+inner_circle12 = gmsh.model.geo.addCircleArc(inner_point6, inner_point4, inner_point5)
+
+# Define the loop representing the additional inner circle (hole)
+inner_loop6 = gmsh.model.geo.addCurveLoop([inner_circle11, inner_circle12])
+
+radius_inner = 0.08
+# Define the points for the additional inner circle
+xpoint = -0.1
+ypoint = 0.4
+inner_point4 = gmsh.model.geo.addPoint(xpoint, ypoint, 0, lc)
+inner_point5 = gmsh.model.geo.addPoint(xpoint+radius_inner, ypoint, 0, lc)
+inner_point6 = gmsh.model.geo.addPoint(xpoint-radius_inner, ypoint, 0, lc)
+
+# Add the additional inner circle geometry (hole)
+inner_circle13 = gmsh.model.geo.addCircleArc(inner_point5, inner_point4, inner_point6)
+inner_circle14 = gmsh.model.geo.addCircleArc(inner_point6, inner_point4, inner_point5)
+
+# Define the loop representing the additional inner circle (hole)
+inner_loop7 = gmsh.model.geo.addCurveLoop([inner_circle13, inner_circle14])
+
 # Add the new loop to the plane surface
-plane_surface = gmsh.model.geo.addPlaneSurface([outer_loop])#, -inner_loop, -inner_loop2, -inner_loop3, -inner_loop4, -inner_loop5])
+plane_surface = gmsh.model.geo.addPlaneSurface([outer_loop, -inner_loop, -inner_loop2, -inner_loop3, -inner_loop4, -inner_loop5, -inner_loop6, -inner_loop7])
 
 # Define the refinement parameters
-outer_bound_size = 0.2  # Characteristic length near the outer boundary
-inner_bound_size = 0.05  # Characteristic length near the inner boundary
 gmsh.model.geo.addPhysicalGroup(1, [outer_circle1,outer_circle2], 1)
-# gmsh.model.geo.addPhysicalGroup(1, [inner_circle1, inner_circle2], 2)
-# gmsh.model.geo.addPhysicalGroup(1, [inner_circle3, inner_circle4], 3)
-# gmsh.model.geo.addPhysicalGroup(1, [inner_circle5, inner_circle6], 4)
-# gmsh.model.geo.addPhysicalGroup(1, [inner_circle7, inner_circle8], 5)
-# gmsh.model.geo.addPhysicalGroup(1, [inner_circle9, inner_circle10], 6)
-gmsh.model.geo.addPhysicalGroup(2, [outer_loop],2)#,inner_loop,inner_loop2,inner_loop3,inner_loop4,inner_loop5], 7)
+gmsh.model.geo.addPhysicalGroup(1, [inner_circle1, inner_circle2], 2)
+gmsh.model.geo.addPhysicalGroup(1, [inner_circle3, inner_circle4], 3)
+gmsh.model.geo.addPhysicalGroup(1, [inner_circle5, inner_circle6], 4)
+gmsh.model.geo.addPhysicalGroup(1, [inner_circle7, inner_circle8], 5)
+gmsh.model.geo.addPhysicalGroup(1, [inner_circle9, inner_circle10], 6)
+gmsh.model.geo.addPhysicalGroup(1, [inner_circle11, inner_circle12], 7)
+gmsh.model.geo.addPhysicalGroup(1, [inner_circle13, inner_circle14], 8)
+gmsh.model.geo.addPhysicalGroup(2, [outer_loop,inner_loop,inner_loop2,inner_loop3,inner_loop4,inner_loop5,inner_loop6,inner_loop7], 9)
 
 # Define the transfinite mesh using the size fields
 # gmsh.model.mesh.field.setAsBackgroundMesh(field_outer)
@@ -115,7 +145,7 @@ gmsh.option.setNumber("Mesh.MshFileVersion",2.2)
 
 
 # Save the mesh to a file
-gmsh.write("mesh/meshCircle.msh")
+gmsh.write("mesh/meshHoles2.msh")
 
 gmsh.fltk.run()
 
